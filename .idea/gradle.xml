@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/configuration-abstractions" />
+            <option value="$PROJECT_DIR$/data-abstractions" />
+            <option value="$PROJECT_DIR$/host-abstractions" />
+            <option value="$PROJECT_DIR$/host-implementations" />
+            <option value="$PROJECT_DIR$/messaging-abstractions" />
+            <option value="$PROJECT_DIR$/mongodb-implementations" />
+            <option value="$PROJECT_DIR$/rabbitmq-implementations" />
+            <option value="$PROJECT_DIR$/rdbms-implementations" />
+            <option value="$PROJECT_DIR$/serialization-abstractions" />
+            <option value="$PROJECT_DIR$/threading-abstractions" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

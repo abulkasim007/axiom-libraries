@@ -1,0 +1,142 @@
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = 'libs.axiom'
+version = '1.0-SNAPSHOT'
+
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(libs.versions.java.get().toInteger())
+        }
+    }
+
+
+    apply plugin: 'maven-publish'
+
+    tasks.register('sourcesJar', Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                groupId = 'libs.axiom'
+                artifactId = project.name
+                version = rootProject.version
+            }
+        }
+    }
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':host-abstractions') {
+    apply plugin: 'java-library'
+}
+
+project(':configuration-abstractions') {
+    apply plugin: 'java-library'
+}
+
+project(':serialization-abstractions') {
+    apply plugin: 'java-library'
+}
+
+project(':threading-abstractions') {
+    apply plugin: 'java-library'
+}
+
+project(':messaging-abstractions') {
+    apply plugin: 'java-library'
+    dependencies {
+        api libs.guice
+        api libs.slf4j.api
+        api libs.jakarta.persistence
+        api project(":serialization-abstractions")
+        api project(":configuration-abstractions")
+    }
+}
+
+project(':data-abstractions') {
+    apply plugin: 'java-library'
+
+    dependencies {
+        api project(":host-abstractions")
+        api project(":messaging-abstractions")
+        api project(":threading-abstractions")
+
+        api libs.querydsl
+        api libs.jakarta.inject
+        api libs.jakarta.transaction
+        annotationProcessor "io.github.openfeign.querydsl:querydsl-apt:${libs.versions.querydslapt.get()}:general"
+    }
+}
+
+project(':mongodb-implementations') {
+    apply plugin: 'java-library'
+
+    dependencies {
+        api project(":data-abstractions")
+
+        api libs.mongodb
+        api libs.classgraph
+        api libs.querydslmongodb
+    }
+}
+
+project(':rdbms-implementations') {
+    apply plugin: 'java-library'
+
+    dependencies {
+        api project(":data-abstractions")
+
+        api libs.hibernate
+        api libs.hikaricp
+        api libs.querydslJpa
+    }
+}
+
+
+project(':host-implementations') {
+    apply plugin: 'java-library'
+
+    dependencies {
+        api project(":host-abstractions")
+        api project(":threading-abstractions")
+        api project(":messaging-abstractions")
+        api project(":configuration-abstractions")
+
+        api libs.json
+        api libs.config
+        api libs.slf4j.simple
+    }
+}
+
+project(':rabbitmq-implementations') {
+    apply plugin: 'java-library'
+
+    dependencies {
+        api project(":host-abstractions")
+        api project(":messaging-abstractions")
+        api project(":threading-abstractions")
+
+        api libs.amqp
+    }
+}
